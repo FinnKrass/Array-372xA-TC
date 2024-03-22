@@ -1,0 +1,97 @@
+function;page-name;control-name;control-type;comment/action;page-name/tag-value;control-name/comment;control-type/comment
+tip;Main;Status;indicatornum;[OK] tip not found
+tip;Main;Status;indicatornum;[OK] tip not found
+tip;unpaged setup;Status;Updater;[OK] tip not found
+tip;Main;Modes;comboboxHot;[OK] tip not found
+tip;Main;Voltage;number;[OK] tip is;Constant load voltage for CV
+tip;Main;Current;number;[OK] tip is;Constant load current for CC
+tip;Main;Resistance_Low;number;[OK] tip is;Constant load resistance for CCL
+tip;Main;Resistance_Medium;number;[OK] tip is;Constant load resistance for CCM
+tip;Main;Resistance_High;number;[OK] tip is;Constant load resistance for CCH
+tip;Main;Power;number;[OK] tip is;Constant load power for CPV and CPC
+tip;Main;Mode_selector;selector;[OK] tip preferable absent and not found
+tip;Config;Rise_Rate;number;[OK] tip is;Current rise rate per microsecond
+tip;Config;Fall_Rate;number;[OK] tip is;Current fall rate per microsecond
+tip;Config;Current_Protection;number;[OK] tip is;Over-current protection level
+tip;Config;OCP;checkbox;[OK] tip is;Enable or disable OCP
+tip;Transient;Transient_Mode;comboboxHot;[OK] tip not found
+tip;Transient;CRL_Low;number;[OK] tip is;Low transient event resistance
+tip;Transient;CRL_High;number;[OK] tip is;High transient event resistance
+tip;Transient;CRM_Low;number;[OK] tip is;Low transient event resistance
+tip;Transient;CRM_High;number;[OK] tip is;High transient event resistance
+tip;Transient;CRH_Low;number;[OK] tip is;Low transient event resistance
+tip;Transient;CRH_High;number;[OK] tip is;High transient event resistance
+tip;Transient;CC_Low;number;[OK] tip is;Low transient event current
+tip;Transient;CC_High;number;[OK] tip is;High transient event current
+tip;Transient;CV_Low;number;[OK] tip is;Low transient event voltage
+tip;Transient;CV_High;number;[OK] tip is;Low transient event voltage
+tip;Transient;Transient_selector;selector;[OK] tip preferable absent and not found
+tip;Transient;Low_Time;number;[OK] tip is;Set period for low level transient event
+tip;Transient;High_Time;number;[OK] tip is;Set period for high level transient event
+tip;Transient;Rise_Time;number;[OK] tip is;Rise time of transient event
+tip;Transient;Fall_Time;number;[OK] tip is;Fall time of transient event
+tip;Transient;Transient_State;buttons;[OK] tip not found
+tip;unpaged setup;-;separator;[OK] tip not found
+tip;unpaged setup;Status;buttons;[OK] tip not found
+info;Main;Status;indicatornum;cmdsetup found
+info;Main;Status;indicatornum;cmdsetup found
+info;unpaged setup;Status;Updater;cmdsetup found
+info;Main;Modes;comboboxHot;cmdsetup found
+info;Main;Voltage;number;cmdsetup found
+info;Main;Current;number;cmdsetup found
+info;Main;Resistance_Low;number;cmdsetup found
+info;Main;Resistance_Medium;number;cmdsetup found
+info;Main;Resistance_High;number;cmdsetup found
+info;Main;Power;number;cmdsetup found
+info;Main;Mode_selector;selector;cmdsetup found
+info;Config;Rise_Rate;number;cmdsetup found
+info;Config;Fall_Rate;number;cmdsetup found
+info;Config;Current_Protection;number;cmdsetup found
+info;Config;OCP;checkbox;cmdsetup found
+info;Transient;Transient_Mode;comboboxHot;cmdsetup found
+info;Transient;CRL_Low;number;cmdsetup found
+info;Transient;CRL_High;number;cmdsetup found
+info;Transient;CRM_Low;number;cmdsetup found
+info;Transient;CRM_High;number;cmdsetup found
+info;Transient;CRH_Low;number;cmdsetup found
+info;Transient;CRH_High;number;cmdsetup found
+info;Transient;CC_Low;number;cmdsetup found
+info;Transient;CC_High;number;cmdsetup found
+info;Transient;CV_Low;number;cmdsetup found
+info;Transient;CV_High;number;cmdsetup found
+info;Transient;Transient_selector;selector;cmdsetup found
+info;Transient;Low_Time;number;cmdsetup found
+info;Transient;High_Time;number;cmdsetup found
+info;Transient;Rise_Time;number;cmdsetup found
+info;Transient;Fall_Time;number;cmdsetup found
+info;Transient;Transient_State;buttons;cmdsetup found
+info;unpaged setup;-;separator;cmdsetup found
+info;unpaged setup;Status;buttons;cmdsetup found
+update;unpaged setup;Status;Updater;updates;Main;Status;indicatornum
+update;unpaged setup;Status;Updater;updates;Main;Status;indicatornum
+update;unpaged setup;Status;Updater;updates;unpaged setup;Status;Updater
+update;unpaged setup;Status;Updater;updates;unpaged setup;Status;buttons
+update;Main;Modes;comboboxHot;tries update of;Mode;, but not found
+update;Main;Modes;comboboxHot;updates;Main;Mode_selector;selector
+update;Main;Modes;comboboxHot;updates;Transient;Transient_selector;selector
+selector;Main;Resistance_Medium;;in entry CV of;Main;Mode_selector
+selector;Main;Resistance_Medium;;in entry CCH of;Main;Mode_selector
+selector;Main;Resistance_Medium;;in entry CPV of;Main;Mode_selector
+selector;Main;Resistance_Medium;;in entry CPC of;Main;Mode_selector
+selector;Main;Resistance_Low;;in entry CRL of;Main;Mode_selector
+selector;Main;Resistance_Medium;;in entry CRM of;Main;Mode_selector
+selector;Main;Resistance_High;;in entry CRH of;Main;Mode_selector
+selector;Transient;CV_High;;in entry CV of;Transient;Transient_selector
+selector;Transient;CV_Low;;in entry CV of;Transient;Transient_selector
+selector;Transient;CC_High;;in entry CCH of;Transient;Transient_selector
+selector;Transient;CC_Low;;in entry CCH of;Transient;Transient_selector
+selector;Transient;CC_High;;in entry CPV of;Transient;Transient_selector
+selector;Transient;CC_Low;;in entry CPV of;Transient;Transient_selector
+selector;Transient;CC_High;;in entry CPC of;Transient;Transient_selector
+selector;Transient;CC_Low;;in entry CPC of;Transient;Transient_selector
+selector;Transient;CRL_High;;in entry CRL of;Transient;Transient_selector
+selector;Transient;CRL_Low;;in entry CRL of;Transient;Transient_selector
+selector;Transient;CRM_High;;in entry CRM of;Transient;Transient_selector
+selector;Transient;CRM_Low;;in entry CRM of;Transient;Transient_selector
+selector;Transient;CRH_High;;in entry CRH of;Transient;Transient_selector
+selector;Transient;CRH_Low;;in entry CRH of;Transient;Transient_selector

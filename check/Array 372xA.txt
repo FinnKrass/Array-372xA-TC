@@ -1,0 +1,372 @@
+; *******************************************************************************************************
+#notes
+Basic definition for Array 372xA Electronic Load.
+
+LIMITATIONS:
+- Only SERIAL connection is supported, though the GPIB card would be easy to add I just don't have one to test.
+- Some more advanced features such as transients and battery testing have been omitted for simplicity's sake.
+- Devices 3721A, 3722A and 3723A are untested at the time of writing.
+; *******************************************************************************************************
+
+; Device identification and connection parameters
+; *******************************************************************************************************
+#metadef
+#idString ARRAY,3720A,
+#name Array 3720A
+#handle A3720A
+#replaceText MinResistanceL 0.02
+#replaceText MaxResistanceL 2
+#replaceText MinResistanceM 2
+#replaceText MaxResistanceM 200
+#replaceText MinResistanceH 20
+#replaceText MaxResistanceH 2000
+#replaceText MaxCurrent 30
+#replaceText MaxVoltage 80
+#replaceText MaxPower 250
+#replaceText MaxRiseRate 3
+
+#metadef
+#idString ARRAY,3721A,
+#name Array 3721A
+#handle A3721A
+#replaceText MinResistanceL 0.02
+#replaceText MaxResistanceL 2
+#replaceText MinResistanceM 2
+#replaceText MaxResistanceM 200
+#replaceText MinResistanceH 20
+#replaceText MaxResistanceH 2000
+#replaceText MaxCurrent 40
+#replaceText MaxVoltage 80
+#replaceText MaxPower 400
+#replaceText MaxRiseRate 4
+
+#metadef
+#idString ARRAY,3722A,
+#name Array 3722A
+#handle A3722A
+#replaceText MinResistanceL 0.0666
+#replaceText MaxResistanceL 6.66
+#replaceText MinResistanceM 6.66
+#replaceText MaxResistanceM 666
+#replaceText MinResistanceH 66.6
+#replaceText MaxResistanceH 6660
+#replaceText MaxCurrent 20
+#replaceText MaxVoltage 200
+#replaceText MaxPower 200
+#replaceText MaxRiseRate 4
+
+#metadef
+#idString ARRAY,3723A,
+#name Array 3723A
+#handle A3723A
+#replaceText MinResistanceL 0.0666
+#replaceText MaxResistanceL 6.66
+#replaceText MinResistanceM 6.66
+#replaceText MaxResistanceM 666
+#replaceText MinResistanceH 66.6
+#replaceText MaxResistanceH 6660
+#replaceText MaxCurrent 30
+#replaceText MaxVoltage 200
+#replaceText MaxPower 350
+#replaceText MaxRiseRate 4
+
+#meta
+
+#idString ARRAY,3720A,
+#name Array 3720A
+#handle A3720A
+#port com
+#baudrate 9600
+#driver SCPI
+
+
+#outputOff INP OFF
+
+#value Voltage V D3
+#value Current A D3
+#value Power W D3
+
+#askValues MEAS:VOLT?; MEAS:CURR?; MEAS:POWER?;
+
+#askMode SOUR:MODE?
+
+; Initial commands to ELoad when establishing connection
+#initCmd SYSTEM:REMOTE;[500]
+
+
+; Final command to ELoad before breaking connection
+#finalCmd INP OFF;[500];SYST:LOC
+
+; Interface UNTESTED
+; This type will specify the handle name for the first device with this type
+; This makes it possible to easy get generic handle names for a setup, that will work with a script
+#interfaceType Load
+; These function will adjust settings
+#interface setVoltage voltage (value)
+#interface setCurrent current (value)
+#interface setPower power (value)
+#interface setResistance resistance (value)
+#interface setOn INP (value)
+; These function will return the value applied with the set function
+#interface getVoltage voltage?
+#interface getCurrent current?
+#interface getPower power?
+#interface getResistance resistance?
+#interface getOn INP?
+; These functions will read the actual values
+; These can either contain a number that will reference to a data column or they can contain a command to read the value
+#interface readVoltage 0
+#interface readCurrent 1
+#interface readPower 2
+#interface readCapacity 3
+#interface readEnergy 4
+
+; Mode
+; *******************************************************************************************************
+
+#cmdMode CV _
+SOUR:MODE CV
+
+#cmdMode CC _
+SOUR:MODE CCH
+
+#cmdMode CRL _
+SOUR:MODE CRL
+
+#cmdMode CRM _
+SOUR:MODE CRM
+
+#cmdMode CRH _
+SOUR:MODE CRH
+
+#cmdMode CPC _
+SOUR:MODE CPC
+
+#cmdMode CPV _
+SOUR:MODE CPV
+
+; Setup
+; *******************************************************************************************************
+
+; Setup Pages
+
+; Main--------------------------------------------------------
+
+#cmdSetup indicatornum Status Main
+:read: INP?
+:updatealloff:
+;UNTESTED
+Off 99 red
+On 1 red
+
+#cmdSetup indicatornum Status Main
+:read: TRAN?
+:updatealloff:
+Off 99 Blue
+On 1 Blue
+
+#cmdSetup Updater Status
+:update: Status
+1
+
+#cmdSetup comboboxHot Modes Main
+:read: SOUR:MODE?
+:write: SOUR:MODE
+:update: Mode Mode_selector Transient_selector
+:updatemodechange:
+CV CV
+CC CCH
+CRL CRL
+CRM CRM
+CRH CRH
+CPC CPC
+CPV CPV
+
+#cmdSetup number Voltage Main
+:read: voltage?
+:write: voltage
+:tip: Constant load voltage for CV
+Volts 0 MaxVoltage
+
+#cmdSetup number Current Main
+:read: current?
+:write: current
+:tip: Constant load current for CC
+Amps 0 MaxCurrent
+
+#cmdSetup number Resistance_Low Main
+:read: resistance?
+:write: resistance
+:tip: Constant load resistance for CCL
+Ohms MinResistanceL MaxResistanceL
+
+#cmdSetup number Resistance_Medium Main
+:read: resistance?
+:write: resistance
+:tip: Constant load resistance for CCM
+Ohms MinResistanceM MaxResistanceM
+
+#cmdSetup number Resistance_High Main
+:read: resistance?
+:write: resistance
+:tip: Constant load resistance for CCH
+Ohms MinResistanceH MaxResistanceH
+
+#cmdSetup number Power Main
+:read: power?
+:write: power
+:tip: Constant load power for CPV and CPC
+Watts 0 MaxPower
+
+#cmdSetup selector Mode_selector Main
+; idk I couldn't figure out the enable function to get rid of the selector
+:read: SOUR:MODE?
+CV Main.Resistance_Medium
+CCH Main.Resistance_Medium
+CPV Main.Resistance_Medium
+CPC Main.Resistance_Medium
+CRL Main.Resistance_Low
+CRM Main.Resistance_Medium
+CRH Main.Resistance_High
+
+; Config------------------------------------------------------
+
+#cmdSetup number Rise_Rate Config
+:read: CURR:RISE:RATE?
+:write: CURR:RISE:RATE
+:tip: Current rise rate per microsecond
+Amps 0.001 MaxRiseRate
+
+#cmdSetup number Fall_Rate Config
+:read: CURR:FALL:RATE?
+:write: CURR:FALL:RATE
+:tip: Current fall rate per microsecond
+Amps 0.001 MaxRiseRate
+
+#cmdSetup number Current_Protection Config
+:read: CURR:PROT?
+:write: CURR:PROT
+:tip: Over-current protection level
+Amps 0 MaxCurrent
+
+#cmdSetup checkbox OCP Config
+:read: CURR:PROT:STAT?
+:write: CURR:PROT:STAT
+:tip: Enable or disable OCP
+on 0 1
+
+; Transient---------------------------------------------------
+
+#cmdSetup comboboxHot Transient_Mode Transient
+:read: TRAN:MODE?
+:write: TRAN:MODE
+Continuous CONT
+Pulse PULS
+Toggle TOGG
+
+#cmdSetup number CRL_Low Transient
+:read: RES:LOW?
+:write: RES:LOW
+:tip: Low transient event resistance
+Ohms MinResistanceL MaxResistanceL
+
+#cmdSetup number CRL_High Transient
+:read: RES:HIGH?
+:write: RES:HIGH
+:tip: High transient event resistance
+Ohms MinResistanceL MaxResistanceL
+
+#cmdSetup number CRM_Low Transient
+:read: RES:LOW?
+:write: RES:LOW
+:tip: Low transient event resistance
+Ohms MinResistanceM MaxResistanceM
+
+#cmdSetup number CRM_High Transient
+:read: RES:HIGH?
+:write: RES:HIGH
+:tip: High transient event resistance
+Ohms MinResistanceM MaxResistanceM
+
+#cmdSetup number CRH_Low Transient
+:read: RES:LOW?
+:write: RES:LOW
+:tip: Low transient event resistance
+Ohms MinResistanceH MaxResistanceH
+
+#cmdSetup number CRH_High Transient
+:read: RES:HIGH?
+:write: RES:HIGH
+:tip: High transient event resistance
+Ohms MinResistanceH MaxResistanceH
+
+#cmdSetup number CC_Low Transient
+:read: CURR:LOW?
+:write: CURR:LOW
+:tip: Low transient event current
+Amps 0 MaxCurrent
+
+#cmdSetup number CC_High Transient
+:read: CURR:HIGH?
+:write: CURR:HIGH
+:tip: High transient event current
+Amps 0 MaxCurrent
+
+#cmdSetup number CV_Low Transient
+:read: VOLT:LOW?
+:write: VOLT:LOW
+:tip: Low transient event voltage
+Volts 0 MaxVoltage
+
+#cmdSetup number CV_High Transient
+:read: VOLT:HIGH?
+:write: VOLT:HIGH
+:tip: Low transient event voltage
+Volts 0 MaxVoltage
+
+#cmdSetup selector Transient_selector Transient
+:read: SOUR:MODE?
+CV Transient.CV_High Transient.CV_Low
+CCH Transient.CC_High Transient.CC_Low
+CPV Transient.CC_High Transient.CC_Low
+CPC Transient.CC_High Transient.CC_Low
+CRL Transient.CRL_High Transient.CRL_Low
+CRM Transient.CRM_High Transient.CRM_Low
+CRH Transient.CRH_High Transient.CRH_Low
+
+#cmdSetup number Low_Time Transient
+:read: TRAN:LTIM?
+:write: TRAN:LTIM
+:tip: Set period for low level transient event
+S 0 0.65535
+
+#cmdSetup number High_Time Transient
+:read: TRAN:HTIM?
+:write: TRAN:HTIM
+:tip: Set period for high level transient event
+S 0 0.65535
+
+#cmdSetup number Rise_Time Transient
+:read: TRAN:RTIM?
+:write: TRAN:RTIM
+:tip: Rise time of transient event
+S 0.00001 0.65535
+
+#cmdSetup number Fall_Time Transient
+:read: TRAN:FTIM?
+:write: TRAN:FTIM
+:tip: Fall time of transient event
+S 0.00001 0.65535
+
+#cmdSetup buttons Transient_State Transient
+:write: TRAN
+off 0
+on 1
+
+#cmdSetup separator -
+2 100 Sunken
+
+#cmdSetup buttons Status
+:write: INP
+off 0
+on 1
