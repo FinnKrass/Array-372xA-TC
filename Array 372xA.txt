@@ -4,7 +4,7 @@ Basic definition for Array 372xA Electronic Load.
 
 LIMITATIONS:
 - Only SERIAL connection is supported, though the GPIB card would be easy to add I just don't have one to test.
-- Some more advanced features such as transients and battery testing have been omitted for simplicity's sake.
+- Some more advanced features such as battery testing and lists have been omitted for simplicity's sake.
 - Devices 3721A, 3722A and 3723A are untested at the time of writing.
 ; *******************************************************************************************************
 
@@ -158,12 +158,14 @@ SOUR:MODE CPV
 #cmdSetup indicatornum Status Main
 :read: INP?
 :updatealloff:
+:tip: Input state indicator
 Off 99 red
 On 1 red
 
 #cmdSetup indicatornum Status Main
 :read: TRAN?
 :updatealloff:
+:tip: Transient enabled indicator
 Off 99 Blue
 On 1 Blue
 
@@ -174,6 +176,7 @@ On 1 Blue
 #cmdSetup comboboxHot Modes Main
 :write: SOUR:MODE
 :read: SOUR:MODE?
+:tip: Select main operation mode, available controls may be mode specific
 :update: Mode Mode_selector Transient_selector
 :updatemodechange:
 CV CV
@@ -193,25 +196,25 @@ Volts 0 MaxVoltage
 #cmdSetup number Current Main
 :read: current?
 :write: current
-:tip: Constant load current for CC
+:tip: Constant load current for CC, only CCH available for simplicity
 Amps 0 MaxCurrent
 
 #cmdSetup number Resistance_Low Main
 :read: resistance?
 :write: resistance
-:tip: Constant load resistance for CCL
+:tip: Constant load resistance for CRL
 Ohms MinResistanceL MaxResistanceL
 
 #cmdSetup number Resistance_Medium Main
 :read: resistance?
 :write: resistance
-:tip: Constant load resistance for CCM
+:tip: Constant load resistance for CRM
 Ohms MinResistanceM MaxResistanceM
 
 #cmdSetup number Resistance_High Main
 :read: resistance?
 :write: resistance
-:tip: Constant load resistance for CCH
+:tip: Constant load resistance for CRH
 Ohms MinResistanceH MaxResistanceH
 
 #cmdSetup number Power Main
@@ -262,9 +265,23 @@ on 0 1
 #cmdSetup comboboxHot Transient_Mode Transient
 :read: TRAN:MODE?
 :write: TRAN:MODE
+:tip: Transient operation modes, pulse and toggle require a trigger event
 Continuous CONT
 Pulse PULS
 Toggle TOGG
+
+#cmdSetup comboboxHot Trigger_Source Transient
+:read: TRIG:SOUR?
+:write: TRIG:SOUR
+:tip: Select source of trigger, use bus option for software trigger, hold option omitted for lack of use
+Bus BUS
+External EXT
+
+#cmdSetup checkbox Trigger_Sys Transient
+:read: INIT:CONT?
+:write: INIT:CONT
+:tip: Enable or disable trigger subsystem
+armed 0 1
 
 #cmdSetup number CRL_Low Transient
 :read: RES:LOW?
@@ -323,7 +340,7 @@ Volts 0 MaxVoltage
 #cmdSetup number CV_High Transient
 :read: VOLT:HIGH?
 :write: VOLT:HIGH
-:tip: Low transient event voltage
+:tip: High transient event voltage
 Volts 0 MaxVoltage
 
 #cmdSetup selector Transient_selector Transient
@@ -360,15 +377,21 @@ S 0.00001 0.65535
 :tip: Fall time of transient event
 S 0.00001 0.65535
 
-#cmdSetup buttons Transient_State Transient
-:write: TRAN
+#cmdSetup buttons Input_Status
+:write: INP
+:tip: Input state control
 off 0
 on 1
 
 #cmdSetup separator -
 2 100 Sunken
 
-#cmdSetup buttons Status
-:write: INP
+#cmdSetup buttons Transient_Status
+:write: TRAN
+:tip: Enable or disable transient operation
 off 0
 on 1
+
+#cmdSetup button Trigger
+:write: *TRG
+:tip: Issue a trigger signal
